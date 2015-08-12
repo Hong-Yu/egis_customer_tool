@@ -50,10 +50,14 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="driver_io.h" />
+    <ClInclude Include="image_manager.h" />
+    <ClInclude Include="sensor_control.h" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="driver_io.cpp" />
+    <ClCompile Include="image_manager.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="sensor_control.cpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

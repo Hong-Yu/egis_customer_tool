@@ -10,7 +10,6 @@ DriverIO::DriverIO() {
 	const char *device = "/dev/esfp0";
 	_device_director = open(device, O_RDWR);
 	printf("Open device path: %s return: %d\n", device, _device_director);
-
 }
 
 int DriverIO::RegisterRead(unsigned char address, unsigned char *value) {
@@ -41,7 +40,7 @@ int DriverIO::RegisterWrite(unsigned char address, unsigned char value) {
 	tr.len = ARRAY_SIZE(tx);
 	tr.opcode = FPS_REGISTER_MASSWRITE;
 	ret = ioctl(_device_director, SPI_IOC_MESSAGE(1), &tr);
-	printf("Write register address: %x value: %x return: %d\n", address, value, ret);
+	//printf("Write register address: %x value: %x return: %d\n", address, value, ret);
 	return ret;
 }
 
