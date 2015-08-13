@@ -23,7 +23,7 @@ int Menu() {
 	printf("%d. Register read\n", k_read_register);
 	printf("%d. Register write\n", K_write_register);
 	printf("%d. Image capture\n", k_capture_image);
-	printf("%d. Interrupt check\n", k_check_interrupt);
+	printf("%d. Interrupt check (software)\n", k_check_interrupt);
 	printf("%d. Data clean\n", k_clean_data);
 	printf("%d. Exit\n", k_exit);
 	int menu_num;
@@ -32,7 +32,7 @@ int Menu() {
 }
 
 int main(int argc, char *argv[]) {
-	printf("love is an open door. 2015.8.12 02:17\n");
+	printf("ET300. 2015.8.13 11:06\n");
 	DriverIO driver_io;
 	SensorControl sensor_control(&driver_io);
 	// Image begin 
@@ -42,8 +42,9 @@ int main(int argc, char *argv[]) {
 	int return_code;
 	int address, value;
 	unsigned char value_char;
+	char buffer_char[255];
 	int menu_num;
-	int dc_offset, threshold;
+	int dc_offset, threshold, interval, times;
 	bool is_continue = true;
 	do {
 		menu_num = Menu();
@@ -54,14 +55,14 @@ int main(int argc, char *argv[]) {
 			break;
 		case k_read_register:
 			printf("Enter register address: ");
-			scanf("%d", &address);
+			scanf("%x", &address);
 			sensor_control.RegisterRead((unsigned char)address, &value_char);
 			break;
 		case K_write_register:
 			printf("Enter register address: ");
-			scanf("%d", &address);
+			scanf("%x", &address);
 			printf("Enter register value: ");
-			scanf("%d", &value);
+			scanf("%x", &value);
 			sensor_control.RegisterWrite((unsigned char)address, (unsigned char)value);
 			break;
 		case k_capture_image:
@@ -72,11 +73,18 @@ int main(int argc, char *argv[]) {
 		case k_check_interrupt:
 			sensor_control.set_power_on_mode();
 			sensor_control.set_detect_mode();
-			printf("Enter DC offset: ");
-			scanf("%d", &dc_offset);
-			printf("Enter threshold: ");
-			scanf("%d", &threshold);
-			sensor_control.InterruptCheck((unsigned char)dc_offset, (unsigned char)threshold);
+			printf("Enter DC offset: (default: 0x80)");
+			//fflush(stdin);
+			//fgets(buffer_char, sizeof(buffer_char), stdin);
+			scanf("%x", &dc_offset);
+			printf("Enter threshold: (default: 0x04)");
+			scanf("%x", &threshold);
+			printf("Enter time interval: (default: 5 ms)");
+			scanf("%d", &interval);
+			printf("Enter the number of : (default: 100)");
+			scanf("%d", &times);
+			sensor_control.InterruptCheck((unsigned char)dc_offset, 
+				(unsigned char)threshold, interval, times);
 			break;
 		case k_clean_data:
 			remove(filename);

@@ -51,5 +51,4 @@ int ImageManager::SaveImageToBmp(const char* filename) {
 	free(greyimage);
 	fclose(fp);
 	return 0;
-
 }

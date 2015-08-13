@@ -73,8 +73,15 @@ int SensorControl::ImageRead(int image_width, int image_height) {
 	_driver_io->RegisterWrite(0x0D, 0x00); //Timing generation off
 }
 
-int SensorControl::InterruptCheck(unsigned char dc_offset, unsigned char threshold) {
+int SensorControl::InterruptCheck(unsigned char dc_offset, unsigned char threshold, int interval, int times) {
 	unsigned char value;
+	interval *= 1000;
+	if (dc_offset > 0x7f && dc_offset < 0x00) dc_offset = 0x80;
+	if (threshold > 0x7f && threshold < 0x00) threshold = 0x04;
+	if (interval > 1E4 && dc_offset < 0) interval = 1000 * 10;
+	if (times > 1E6 && dc_offset < 0) times = 100;
+	printf("DC offset: %x Threshold: %x Interval[ms]: %d Times: %d\n",
+		dc_offset, threshold, interval/1000, times);
 	_driver_io->RegisterWrite(0x09, 0x00); // Gain
 	_driver_io->RegisterWrite(0x03, dc_offset << 1); // Dc offset
 	_driver_io->RegisterWrite(0x08, threshold << 1); // Threshold
@@ -95,5 +102,4 @@ int SensorControl::InterruptCheck(unsigned char dc_offset, unsigned char thresho
 		printf("Interrupt has been received.\n");
 	else
 		printf("No interrupt received.\n");
-
 }

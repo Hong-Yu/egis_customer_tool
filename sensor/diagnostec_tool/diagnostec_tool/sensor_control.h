@@ -13,7 +13,7 @@ public:
 	int RegisterRead(unsigned char address, unsigned char *value);
 	int RegisterWrite(unsigned char address, unsigned char value);
 	int ImageRead(int image_width, int image_height);
-	int InterruptCheck(unsigned char gain, unsigned char dc_offset);
+	int InterruptCheck(unsigned char gain, unsigned char dc_offset, int interval, int times);
 
 private:
 	DriverIO *_driver_io;
